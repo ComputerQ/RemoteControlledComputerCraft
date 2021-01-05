@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/ComputerQ/RemoteControlledComputerCraft#readme",
   "dependencies": {
-    "ws": "^7.4.1"
+    "express": "^4.17.1",
+    "websocket": "^1.0.33"
   }
 }
