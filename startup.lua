@@ -1,9 +1,13 @@
-
 term.clear()
 term.setCursorPos(1,1)
-
 print("Remote Controlled Computer Craft (R.C.C.C.)")
 print("By Quinten Muyllaert\n")
+
+if fs.exists("/disk/startup.lua") then
+    print("Found disk drive, updating software.")
+    fs.delete("/startup.lua")
+    fs.copy("/disk/startup.lua","/startup.lua")
+end
 
 local wsUrl = "ws://localhost:8080"
 local ws, err = http.websocket(wsUrl)
@@ -24,10 +28,13 @@ end
 
 function msgf()
     local event, url, contents = os.pullEvent("websocket_message")
+
+    stuff = textutils.unserialiseJSON(contents)
+
     if url == wsUrl then
-        local eval, err = loadstring("return " .. contents)
+        local eval, err = loadstring("return " .. stuff[2])
         if err then print("Could not evaluate. " .. err) end
-        local ret = eval()
+        local ret = textutils.serialiseJSON({stuff[1],{eval()}})
         ws.send(ret)  
     end
 end
@@ -42,12 +49,10 @@ function disf()
 end
 
 if ws then
-    ws.send(os.getComputerID())
     print("Connected to WebSocket!") 
     while true do
         parallel.waitForAny(readMsg,socketDisconnect)
     end
-    ws.close()
 end
 
 if err then
@@ -55,3 +60,4 @@ if err then
     sleep(5)
     os.reboot()
 end
+
