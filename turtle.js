@@ -50,10 +50,50 @@ module.exports = class {
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`turtle.getFuelLevel(${par})`);
 	}
+	async getFuelLimit(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.getFuelLimit(${par})`);
+	}
 	async refuel(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`turtle.refuel(${par})`);
+	}
+	async craft(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.craft(${par})`);
+	}
+	async select(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.select(${par})`);
+	}
+	async getSelectedSlot(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.getSelectedSlot(${par})`);
+	}
+	async getItemSpace(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.getItemSpace(${par})`);
+	}
+	async getItemDetail(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.getItemDetail(${par})`);
+	}
+	async equipLeft(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.equipLeft(${par})`);
+	}
+	async equipRight(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.equipRight(${par})`);
 	}
 	async turnRight(...param) {
 		const str = JSON.stringify(param);
@@ -74,6 +114,16 @@ module.exports = class {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`turtle.back(${par})`);
+	}
+	async up(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.up(${par})`);
+	}
+	async down(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.down(${par})`);
 	}
 	async inspect(...param) {
 		const str = JSON.stringify(param);
@@ -104,6 +154,56 @@ module.exports = class {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`turtle.digDown(${par})`);
+	}
+	async attack(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.attackdig(${par})`);
+	}
+	async attackUp(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.attackUp(${par})`);
+	}
+	async attackDown(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.attackDown(${par})`);
+	}
+	async compare(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.compare(${par})`);
+	}
+	async compareUp(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.compareUp(${par})`);
+	}
+	async compareDown(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.compareDown(${par})`);
+	}
+	async suck(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.suck(${par})`);
+	}
+	async suckUp(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.suckUp(${par})`);
+	}
+	async suckDown(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.suckDown(${par})`);
+	}
+	async transferTo(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.transferTo(${par})`);
 	}
 	async getComputerID(...param) {
 		const str = JSON.stringify(param);
