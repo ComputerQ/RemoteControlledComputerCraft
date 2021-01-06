@@ -5,6 +5,11 @@ module.exports = class {
 		this.commandid = 0;
 		this.replies = {};
 		this.online = true;
+		this.matrix = [
+			[1, 0, -1, 0],
+			[0, 1, 0, -1],
+		];
+		this.turns = 0;
 		this.x = 0;
 		this.y = 0;
 		this.z = 0;
@@ -44,6 +49,11 @@ module.exports = class {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`print(${par})`);
+	}
+	async sleep(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`sleep(${par})`);
 	}
 	async getFuelLevel(...param) {
 		const str = JSON.stringify(param);
@@ -98,32 +108,52 @@ module.exports = class {
 	async turnRight(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
+		this.turns = this.turns + 1 > 3 ? 0 : this.turns + 1;
 		return await this.execute(`turtle.turnRight(${par})`);
 	}
 	async turnLeft(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
+		this.turns = this.turns - 1 < 0 ? 3 : this.turns - 1;
 		return await this.execute(`turtle.turnLeft(${par})`);
 	}
 	async forward(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
-		return await this.execute(`turtle.forward(${par})`);
+		const ret = await this.execute(`turtle.forward(${par})`);
+		if (ret === true) {
+			this.x += this.matrix[0][this.turns];
+			this.z += this.matrix[1][this.turns];
+		}
+		return ret;
 	}
 	async back(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
-		return await this.execute(`turtle.back(${par})`);
+		const ret = await this.execute(`turtle.back(${par})`);
+		if (ret === true) {
+			this.x += -this.matrix[0][this.turns];
+			this.z += -this.matrix[1][this.turns];
+		}
+		return ret;
 	}
 	async up(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
-		return await this.execute(`turtle.up(${par})`);
+		const ret = await this.execute(`turtle.up(${par})`);
+		if (ret === true) {
+			this.y++;
+		}
+		return ret;
 	}
 	async down(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
-		return await this.execute(`turtle.down(${par})`);
+		const ret = await this.execute(`turtle.down(${par})`);
+		if (ret === true) {
+			this.y--;
+		}
+		return ret;
 	}
 	async inspect(...param) {
 		const str = JSON.stringify(param);
@@ -185,6 +215,36 @@ module.exports = class {
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`turtle.compareDown(${par})`);
 	}
+	async place(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.place(${par})`);
+	}
+	async placeUp(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.placeUp(${par})`);
+	}
+	async placeDown(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.placeDown(${par})`);
+	}
+	async drop(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.drop(${par})`);
+	}
+	async dropUp(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.dropUp(${par})`);
+	}
+	async dropDown(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`turtle.dropDown(${par})`);
+	}
 	async suck(...param) {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
@@ -209,5 +269,10 @@ module.exports = class {
 		const str = JSON.stringify(param);
 		const par = str.substring(1, str.length - 1);
 		return await this.execute(`os.getComputerID(${par})`);
+	}
+	async getComputerLabel(...param) {
+		const str = JSON.stringify(param);
+		const par = str.substring(1, str.length - 1);
+		return await this.execute(`os.getComputerLabel(${par})`);
 	}
 };
