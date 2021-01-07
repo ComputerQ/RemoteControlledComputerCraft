@@ -8,23 +8,25 @@ const wss = new WebSocketServer({
 	autoAcceptConnections: false,
 });
 
-const Turtle = require("./turtle.js");
+const Computer = require("./computer.js");
+
+global.cc = {};
 
 wss.on("request", async (request) => {
 	const connection = request.accept();
+	const computer = new Computer(connection);
+	const label = await computer.os.getComputerLabel();
+	const id = await computer.os.getComputerID();
 
-	let turtle = new Turtle(connection);
+	cc[id] = computer;
 
 	try {
-		const label = await turtle.getComputerLabel();
-
 		let script = require(`./scripts/${label}.js`);
 		delete require.cache[require.resolve(`./scripts/${label}.js`)];
 		script = require(`./scripts/${label}.js`);
 
-		turtle = await script(turtle);
+		script.apply(computer);
 	} catch (err) {
-		//bleh
 		console.log(err);
 	}
 });
