@@ -10,13 +10,22 @@ const wss = new WebSocketServer({
 
 const Computer = require("./computer.js");
 
+global.code_instances_running = 0;
 global.cc = {};
 
 wss.on("request", async (request) => {
 	const connection = request.accept();
-	const computer = new Computer(connection);
+	let computer = new Computer(connection);
 	const label = await computer.os.getComputerLabel();
 	const id = await computer.os.getComputerID();
+
+	if (cc[id] != null) {
+		if (cc[id].autoresume) {
+			console.log(`Computer ${id} back online, resuming script.`);
+			cc[id].reconnect(connection);
+			return;
+		}
+	}
 
 	cc[id] = computer;
 
@@ -25,7 +34,12 @@ wss.on("request", async (request) => {
 		delete require.cache[require.resolve(`./scripts/${label}.js`)];
 		script = require(`./scripts/${label}.js`);
 
-		script.apply(computer);
+		console.log("Running new instance of script.");
+		code_instances_running++;
+		computer.idle = false;
+		await script.apply(computer);
+		computer.idle = true;
+		code_instances_running--;
 	} catch (err) {
 		console.log(err);
 	}

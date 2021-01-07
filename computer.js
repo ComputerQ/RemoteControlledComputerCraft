@@ -4,6 +4,7 @@ module.exports = class {
 		this.connection = connection;
 		this.commandid = 0;
 		this.replies = {};
+		this.requests = {};
 		this.online = true;
 		this.matrix = [
 			[1, 0, -1, 0],
@@ -15,6 +16,17 @@ module.exports = class {
 		this.z = 0;
 		this.id = -1;
 		this.label = "";
+		this.autoresume = true;
+		this.autostartIdle = true;
+		this.idle = true;
+
+		this.reconnect(connection);
+	}
+	reconnect(connection) {
+		console.log("reconnected");
+		console.log("Failed requests", this.requests);
+		this.connection = connection;
+		this.online = true;
 
 		this.connection.on("message", (message) => {
 			const json = JSON.parse(message.utf8Data);
@@ -29,12 +41,18 @@ module.exports = class {
 			console.log("Disconnected");
 			this.online = false;
 		});
+
+		for (let id in this.requests) {
+			const obj = [id, this.requests[id]];
+			console.log(obj);
+			this.connection.sendUTF(JSON.stringify(obj));
+		}
 	}
 	execute(cmd) {
 		if (this.online) {
 			const id = this.commandid;
 			const obj = [id, cmd];
-
+			this.requests[id] = cmd;
 			this.connection.sendUTF(JSON.stringify(obj));
 			this.commandid++;
 			return new Promise((resolve) => {
@@ -43,6 +61,7 @@ module.exports = class {
 						clearInterval(poll);
 						const repl = this.replies[id];
 						delete this.replies[id];
+						delete this.requests[id];
 						resolve(repl);
 					}
 				}, 1);
