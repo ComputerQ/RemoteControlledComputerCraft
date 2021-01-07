@@ -1,7 +1,5 @@
 module.exports = class {
 	constructor(connection) {
-		console.log("Connection");
-		this.connection = connection;
 		this.commandid = 0;
 		this.replies = {};
 		this.requests = {};
@@ -23,8 +21,6 @@ module.exports = class {
 		this.reconnect(connection);
 	}
 	reconnect(connection) {
-		console.log("reconnected");
-		console.log("Failed requests", this.requests);
 		this.connection = connection;
 		this.online = true;
 
@@ -38,13 +34,11 @@ module.exports = class {
 		});
 
 		this.connection.on("close", () => {
-			console.log("Disconnected");
 			this.online = false;
 		});
 
 		for (let id in this.requests) {
 			const obj = [id, this.requests[id]];
-			console.log(obj);
 			this.connection.sendUTF(JSON.stringify(obj));
 		}
 	}
